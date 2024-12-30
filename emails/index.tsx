@@ -37,14 +37,14 @@ export const NotionWaitlistEmail = ({ userFirstname }: EmailProps) => (
           I'll keep you posted on the progress and notify you as soon as it's
           ready for you to use. In the meantime, if you have any questions or
           feedback, don't hesitate to reach out by replying directly to{" "}
-          <a href="mailto:lakshb.work@gmail.com" style={link}>
+          <a href="mailto:akshat@mailto.live" style={link}>
             this email {""}
           </a>
           — I'm here to listen!
         </Text>
         <Text style={paragraph}>
           You can also follow me on X/Twitter for updates:{" "}
-          <a href="https://x.com/blakssh" style={link}>
+          <a href="https://x.com/mailto_live" style={link}>
             @blakssh
           </a>
         </Text>
