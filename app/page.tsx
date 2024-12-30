@@ -121,7 +121,6 @@ export default function Home() {
           loading={loading}
         />
       </section>
-      <Footer />
       <Particles
         quantityDesktop={350}
         quantityMobile={100}
