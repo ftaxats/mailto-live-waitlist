@@ -42,9 +42,8 @@ export default function Home() {
 
     const promise = new Promise(async (resolve, reject) => {
       try {
-        // First, attempt to send the email
+        // Send email first
         const mailResponse = await fetch("/api/mail", {
-          cache: "no-store",
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -53,53 +52,50 @@ export default function Home() {
         });
 
         if (!mailResponse.ok) {
-          if (mailResponse.status === 429) {
-            reject("Rate limited");
-          } else {
-            reject("Email sending failed");
-          }
-          return; // Exit the promise early if mail sending fails
+          throw new Error(mailResponse.status === 429 ? "rate_limited" : "email_failed");
         }
 
-        // If email sending is successful, proceed to insert into Notion
+        // Then add to Notion
         const notionResponse = await fetch("/api/notion", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Accept": "application/json",
           },
           body: JSON.stringify({ name, email }),
         });
 
+        const notionData = await notionResponse.json();
+
         if (!notionResponse.ok) {
-          if (notionResponse.status === 429) {
-            reject("Rate limited");
-          } else {
-            reject("Notion insertion failed");
-          }
-        } else {
-          resolve({ name });
+          throw new Error(notionResponse.status === 429 ? "rate_limited" : notionData.error || "notion_failed");
         }
+
+        resolve({ name });
       } catch (error) {
-        reject(error);
+        console.error("Submission error:", error);
+        reject(error instanceof Error ? error.message : "unknown_error");
       }
     });
 
     toast.promise(promise, {
       loading: "Getting you on the waitlist... 🚀",
-      success: (data) => {
+      success: () => {
         setName("");
         setEmail("");
         return "Thank you for joining the waitlist 🎉";
       },
       error: (error) => {
-        if (error === "Rate limited") {
-          return "You're doing that too much. Please try again later";
-        } else if (error === "Email sending failed") {
-          return "Failed to send email. Please try again 😢.";
-        } else if (error === "Notion insertion failed") {
-          return "Failed to save your details. Please try again 😢.";
+        switch (error) {
+          case "rate_limited":
+            return "You're doing that too much. Please try again later 😅";
+          case "email_failed":
+            return "Failed to send email. Please try again 😢";
+          case "notion_failed":
+            return "Failed to save your details. Please try again 😢";
+          default:
+            return "An unexpected error occurred. Please try again 😢";
         }
-        return "An error occurred. Please try again 😢.";
       },
     });
 
@@ -112,9 +108,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center overflow-x-clip pt-12 md:pt-24">
       <section className="flex flex-col items-center px-4 sm:px-6 lg:px-8">
         <Header />
-
         <CTA />
-
         <Form
           name={name}
           email={email}
@@ -123,12 +117,9 @@ export default function Home() {
           handleSubmit={handleSubmit}
           loading={loading}
         />
-
         <Logos />
       </section>
-
       <Footer />
-
       <Particles
         quantityDesktop={350}
         quantityMobile={100}

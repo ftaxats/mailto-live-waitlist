@@ -1,75 +1,34 @@
 import { Client } from "@notionhq/client";
 import { NextResponse } from "next/server";
 
-// Type for the expected request body
-interface RequestBody {
-  email: string;
-  name: string;
-}
-
-// Validate environment variables
-const validateEnvVariables = () => {
-  if (!process.env.NOTION_SECRET) {
-    throw new Error("NOTION_SECRET is not defined");
-  }
-  if (!process.env.NOTION_DB) {
-    throw new Error("NOTION_DB is not defined");
-  }
-  return {
-    notionSecret: process.env.NOTION_SECRET,
-    notionDb: process.env.NOTION_DB,
-  };
-};
-
-// Validate request body
-const validateRequestBody = (body: any): body is RequestBody => {
-  if (!body) return false;
-  if (typeof body.email !== "string" || !body.email) return false;
-  if (typeof body.name !== "string" || !body.name) return false;
-  
-  // Basic email validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(body.email)) return false;
-  
-  return true;
-};
-
-// Initialize Notion client
-const getNotionClient = (secret: string) => {
-  try {
-    return new Client({ auth: secret });
-  } catch (error) {
-    console.error("Failed to initialize Notion client:", error);
-    throw new Error("Failed to initialize Notion client");
-  }
-};
-
 export async function POST(request: Request) {
+  if (request.method === 'OPTIONS') {
+    return new NextResponse(null, { status: 200 });
+  }
+
   try {
-    // Parse request body
     const body = await request.json();
-
-    // Validate environment variables
-    const { notionSecret, notionDb } = validateEnvVariables();
-
-    // Validate request body
-    if (!validateRequestBody(body)) {
+    
+    if (!body.email || !body.name) {
       return NextResponse.json(
-        { 
-          success: false, 
-          error: "Invalid request body. Please provide valid email and name." 
-        },
+        { success: false, error: 'Missing required fields' },
         { status: 400 }
       );
     }
 
-    // Initialize Notion client
-    const notion = getNotionClient(notionSecret);
+    if (!process.env.NOTION_SECRET || !process.env.NOTION_DB) {
+      console.error('Missing environment variables');
+      return NextResponse.json(
+        { success: false, error: 'Server configuration error' },
+        { status: 500 }
+      );
+    }
 
-    // Create page in Notion
+    const notion = new Client({ auth: process.env.NOTION_SECRET });
+
     const response = await notion.pages.create({
       parent: {
-        database_id: notionDb,
+        database_id: process.env.NOTION_DB,
       },
       properties: {
         Email: {
@@ -87,7 +46,7 @@ export async function POST(request: Request) {
             },
           ],
         },
-        "Created At": {
+        "Signup Date": {
           type: "date",
           date: {
             start: new Date().toISOString(),
@@ -96,46 +55,17 @@ export async function POST(request: Request) {
       },
     });
 
-    // Verify response
-    if (!response) {
-      throw new Error("Failed to add entry to Notion");
-    }
-
     return NextResponse.json(
-      { 
-        success: true, 
-        message: "Successfully added to Notion",
-        id: response.id 
-      }, 
-      { status: 201 }
+      { success: true, message: 'Successfully added to waitlist' },
+      { status: 200 }
     );
 
   } catch (error) {
-    // Log the error for debugging
-    console.error("Notion API Error:", error);
-
-    // Determine if it's a known error type
-    if (error instanceof Error) {
-      if (error.message.includes("NOTION_")) {
-        return NextResponse.json(
-          { success: false, error: "Configuration error" },
-          { status: 500 }
-        );
-      }
-      
-      if (error.message.includes("Could not find")) {
-        return NextResponse.json(
-          { success: false, error: "Database not found or access denied" },
-          { status: 404 }
-        );
-      }
-    }
-
-    // Generic error response
+    console.error('Notion API Error:', error);
     return NextResponse.json(
       { 
         success: false, 
-        error: "An unexpected error occurred" 
+        error: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     );
