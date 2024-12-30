@@ -21,16 +21,15 @@ export const NotionWaitlistEmail = ({ userFirstname }: EmailProps) => (
     <Body style={main}>
       <Container style={container}>
         <Img
-          src={`https://nextjs-notion-waitlist.vercel.app/waitlist-logo.png`}
+          src={`https://i.postimg.cc/FKG7QkVb/apple-touch-icon.png`}
           width="220"
           height="100"
-          alt="Notion Waitlist Logo"
+          alt="Mailto Live Waitlist Logo"
           style={logo}
         />
         <Text style={greeting}>Hi {userFirstname},</Text>
         <Text style={paragraph}>
-          Thanks for joining the waitlist for our Next.js + Notion CMS waitlist
-          template! I'm Lakshay, the developer behind this project. I'm glad to
+          Thanks for joining the waitlist for Mailto Live I'm Akshat Shah, the Founder behind this project. I'm glad to
           have you on board.
         </Text>
         <Text style={paragraph}>
