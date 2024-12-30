@@ -60,7 +60,7 @@ export default function Home() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Accept": "application/json",
+            Accept: "application/json",
           },
           body: JSON.stringify({ name, email }),
         });
@@ -68,7 +68,11 @@ export default function Home() {
         const notionData = await notionResponse.json();
 
         if (!notionResponse.ok) {
-          throw new Error(notionResponse.status === 429 ? "rate_limited" : notionData.error || "notion_failed");
+          throw new Error(
+            notionResponse.status === 429
+              ? "rate_limited"
+              : notionData.error || "notion_failed"
+          );
         }
 
         resolve({ name });
@@ -92,7 +96,7 @@ export default function Home() {
           case "email_failed":
             return "Failed to send email. Please try again 😢";
           case "notion_failed":
-            return "Failed to save your details. Please try again 😢";
+            return "Failed to save your details to Notion. Please try again 😢";
           default:
             return "An unexpected error occurred. Please try again 😢";
         }

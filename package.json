@@ -1,6 +1,6 @@
 {
-  "name": "nextjs-notion-waitlist-template",
-  "version": "1.5.0",
+  "name": "nextjs-supabase-waitlist-template",
+  "version": "1.6.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,11 +10,11 @@
     "email": "email dev"
   },
   "dependencies": {
-    "@notionhq/client": "^2.2.15",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@react-email/components": "0.0.19",
     "@react-email/render": "^1.0.3",
+    "@supabase/supabase-js": "^2.39.3",
     "@svgr/webpack": "^8.1.0",
     "@upstash/ratelimit": "^1.2.1",
     "@upstash/redis": "^1.31.6",
