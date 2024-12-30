@@ -42,7 +42,6 @@ export default function Home() {
 
     const promise = new Promise(async (resolve, reject) => {
       try {
-        // Send email first
         const mailResponse = await fetch("/api/mail", {
           method: "POST",
           headers: {
@@ -55,23 +54,22 @@ export default function Home() {
           throw new Error(mailResponse.status === 429 ? "rate_limited" : "email_failed");
         }
 
-        // Then add to Notion
-        const notionResponse = await fetch("/api/notion", {
+        const waitlistResponse = await fetch("/api/waitlist", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Accept: "application/json",
           },
           body: JSON.stringify({ name, email }),
         });
 
-        const notionData = await notionResponse.json();
+        const waitlistData = await waitlistResponse.json();
 
-        if (!notionResponse.ok) {
+        if (!waitlistResponse.ok) {
+          if (waitlistResponse.status === 409) {
+            throw new Error("already_registered");
+          }
           throw new Error(
-            notionResponse.status === 429
-              ? "rate_limited"
-              : notionData.error || "notion_failed"
+            waitlistResponse.status === 429 ? "rate_limited" : waitlistData.error || "save_failed"
           );
         }
 
@@ -95,8 +93,10 @@ export default function Home() {
             return "You're doing that too much. Please try again later 😅";
           case "email_failed":
             return "Failed to send email. Please try again 😢";
-          case "notion_failed":
-            return "Failed to save your details to Notion. Please try again 😢";
+          case "already_registered":
+            return "This email is already registered 😅";
+          case "save_failed":
+            return "Failed to save your details. Please try again 😢";
           default:
             return "An unexpected error occurred. Please try again 😢";
         }
