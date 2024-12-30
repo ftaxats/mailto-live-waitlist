@@ -119,6 +119,7 @@ export default function Home() {
           handleEmailChange={handleEmailChange}
           handleSubmit={handleSubmit}
           loading={loading}
+        />
       </section>
       <Footer />
       <Particles
