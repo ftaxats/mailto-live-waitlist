@@ -72,7 +72,7 @@ There are two ways to use this template:
 
 1. **Deploy to Vercel**: Click the button below to deploy this template to Vercel with a single click.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Flakshaybhushan%2Fnextjs-notion-waitlist-template&env=NOTION_SECRET,NOTION_DB,RESEND_API_KEY,UPSTASH_REDIS_REST_URL,UPSTASH_REDIS_REST_TOKEN)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Flakshaybhushan%2Fnextjs-notion-waitlist-template&env=SUPABASE_SERVICE_KEY,NEXT_PUBLIC_SUPABASE_URL,RESEND_API_KEY,UPSTASH_REDIS_REST_URL,UPSTASH_REDIS_REST_TOKEN)
 
 The above button will create a new Vercel project and clone this repository into your GitHub account. You will need to provide the following environment variables:
 

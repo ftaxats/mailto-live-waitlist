@@ -21,7 +21,7 @@ export const NotionWaitlistEmail = ({ userFirstname }: EmailProps) => (
     <Body style={main}>
       <Container style={container}>
         <Img
-          src={`https://i.postimg.cc/FKG7QkVb/apple-touch-icon.png`}
+          src={`https://i.postimg.cc/3xRGYcRt/Copy-of-Grade-Lab-1-removebg-preview.png`}
           width="220"
           height="100"
           alt="Mailto Live Waitlist Logo"
