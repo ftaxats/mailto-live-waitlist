@@ -44,13 +44,14 @@ export const NotionWaitlistEmail = ({ userFirstname }: EmailProps) => (
         <Text style={paragraph}>
           You can also follow me on X/Twitter for updates:{" "}
           <a href="https://x.com/mailto_live" style={link}>
-            @blakssh
+            @mailto_live
           </a>
         </Text>
         <Text style={signOff}>
           Best regards,
           <br />
-          Lakshay
+          Akshat Shah (Founder)
+          Mailto Live 
         </Text>
         <Hr style={hr} />
         <Text style={footer}>
