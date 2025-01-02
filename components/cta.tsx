@@ -24,7 +24,7 @@ export default function CTA() {
       <motion.img
         src="/logo.png"
         alt="logo"
-        className="mx-auto h-35 w-35"
+        className="mx-auto h-28 w-30"
         variants={itemVariants}
       />
 
