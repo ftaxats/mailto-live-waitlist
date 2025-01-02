@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion } from "framer-motion";
 import TextBlur from "@/components/ui/text-blur";
 import AnimatedShinyText from "@/components/ui/shimmer-text";
@@ -40,6 +41,26 @@ export default function CTA() {
           text="Automate your email with AI, bulk unsubscribe from newsletters, and block cold emails."
           duration={0.8}
         />
+      </motion.div>
+
+      {/* Added Backed By section */}
+      <motion.div 
+        variants={itemVariants}
+        className="flex flex-col items-center mt-8 gap-2"
+      >
+        <span className="text-sm text-zinc-400">Backed by</span>
+        <motion.img
+          src="/aws.png"
+          alt="AWS Logo"
+          className="h-12 w-auto"
+          variants={itemVariants}
+        />
+        <a 
+          href="https://aws.amazon.com/startups/showcase/startup-details/8b83fabb-983a-46fb-8989-6dbb24ad5fa4" 
+          className="text-xs text-white-500 hover:text-white-400 transition-colors"
+        >
+          vote here
+        </a>
       </motion.div>
     </motion.div>
   );
